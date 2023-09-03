@@ -1,0 +1,8 @@
+*~
+*.swp
+.idea/
+dist/
+tmp/
+vendor/
+*.out
+composite-actions

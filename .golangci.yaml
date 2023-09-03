@@ -1,0 +1,135 @@
+run:
+  timeout: 5m
+  build-tags:
+    - integration
+    - benchmark
+  modules-download-mode: readonly
+  allow-parallel-runners: true
+
+linters-settings:
+  depguard:
+    list-type: blacklist
+    packages: []
+    packages-with-error-message: []
+  dupl:
+    threshold: 100
+  exhaustive:
+    default-signifies-exhaustive: true
+  funlen:
+    lines: 100
+    statements: 50
+  gci:
+    local-prefixes: gopherconbr.org/23/testcontainers/demo
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  gocritic:
+    enabled-tags: []
+    disabled-checks: []
+  gocyclo:
+    min-complexity: 25
+  goimports:
+    local-prefixes: gopherconbr.org/23/testcontainers/demo
+  gomnd:
+    settings:
+      mnd:
+        # don't include the "operation" and "assign"
+        checks:
+          - argument
+          - case
+          - condition
+          - return
+  govet:
+    check-shadowing: true
+    settings:
+      printf:
+        funcs:
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Infof
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Warnf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Errorf
+          - (github.com/golangci/golangci-lint/pkg/logutils.Log).Fatalf
+  lll:
+    line-length: 140
+  maligned:
+    suggest-new: true
+  misspell:
+    locale: US
+  nakedret:
+    max-func-lines: 100
+  nolintlint:
+    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
+    allow-unused: false # report any unused nolint directives
+    require-explanation: false # require an explanation for nolint directives
+    require-specific: true # don't require nolint directives to be specific about which linter is being skipped
+linters:
+  # please, do not use `enable-all`: it's deprecated and will be removed soon.
+  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+  disable-all: true
+  enable:
+    - bodyclose
+    - dogsled
+    - errcheck
+    - exhaustive
+    - exportloopref
+    - gochecknoinits
+    - gochecknoglobals
+    - goconst
+    - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - gomnd
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - misspell
+    - nakedret
+    - noctx
+    - nolintlint
+    - rowserrcheck
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+  # don't enable:
+  # - asciicheck
+  # - depguard
+  # - dupl
+  # - gocognit
+  # - godot
+  # - godox
+  # - goerr113
+  # - interfacer
+  # - funlen
+  # - maligned
+  # - nestif
+  # - prealloc
+  # - revive
+  # - scopelint
+  # - testpackage
+  # - wsl
+
+issues:
+  exclude:
+    - 'declaration of "(err|ctx)" shadows declaration at'
+
+  exclude-rules:
+    # Disable linters that are annoying in tests.
+    - path: _test\.go
+      linters:
+        - gochecknoglobals
+        - gomnd
+    - path: tests/
+      linters:
+        - gochecknoglobals
+        - gomnd
+    # Exclude `lll` issues for long lines with `go:generate`.
+    - linters:
+        - lll
+      source: "^//go:generate "
