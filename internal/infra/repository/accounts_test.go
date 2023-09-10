@@ -17,6 +17,9 @@ func TestAccountsSQLRepositorySuite(t *testing.T) {
 	suite.Run(t, new(AccountsSQLRepositorySuite))
 }
 
+/*
+assertAccountInDatabase garante que o registro enviado se encontra na tabela 'accounts'.
+*/
 func (s *AccountsSQLRepositorySuite) assertAccountInDatabase(expected AccountModel) {
 	s.T().Helper()
 	var actual AccountModel

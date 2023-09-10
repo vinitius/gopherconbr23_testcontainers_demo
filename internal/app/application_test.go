@@ -79,6 +79,10 @@ func (s *AppSuite) SetupTest() {
 	s.Require().NoError(err)
 }
 
+/*
+TestRun garante que a aplicação inicia, se conecta ao tópico ACCOUNTS.new e persiste os dados dos eventos recebidos
+na tabela 'accounts'.
+*/
 func (s *AppSuite) TestRun() {
 	// Arrange
 	timeout := 3 * time.Second

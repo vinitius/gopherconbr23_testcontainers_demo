@@ -21,6 +21,10 @@ func (s *AccountsStreamSuite) SetupTest() {
 	s.Ctx = context.TODO()
 }
 
+/*
+TestSubscribe garante que um AccountsSubscriber recebe todas as mensagens postadas no tópico ACCOUNTS.new
+assim que uma inscrição é realizada com sucesso.
+*/
 func (s *AccountsStreamSuite) TestSubscribe() {
 	// Arrange
 	const (
@@ -51,12 +55,12 @@ func (s *AccountsStreamSuite) TestSubscribe() {
 			}
 		}
 	}()
+
+	// Act
 	go func() {
 		err := underTest.Subscribe(ctx, received, ready)
 		s.Require().NoError(err)
 	}()
-
-	// Act
 	<-ready
 	close(ready)
 	for _, msg := range expected {

@@ -10,6 +10,9 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
+/*
+AccountsSubscriber representa a implementação de um subscriber NATS para um tópico dentro de um domínio de ACCOUNTS.
+*/
 type AccountsSubscriber struct {
 	natsConn *nats.Conn
 }
@@ -18,6 +21,10 @@ func NewAccountsSubscriber(natsConn *nats.Conn) AccountsSubscriber {
 	return AccountsSubscriber{natsConn: natsConn}
 }
 
+/*
+Subscribe realiza uma inscrição no tópico ACCOUNTS.new e notifica a chegada de eventos através do canal 'rcv'.
+Uma vez que a conexão é estabelecida com sucesso, uma notificação é enviada ao canal 'ready'.
+*/
 func (s AccountsSubscriber) Subscribe(ctx context.Context, rcv chan<- []byte, ready chan<- struct{}) error {
 	const (
 		fetchTimeout = 200 * time.Millisecond

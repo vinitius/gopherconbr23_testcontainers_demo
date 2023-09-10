@@ -32,30 +32,30 @@ func NewNatsServer(t *testing.T) *NatsServer {
 			config.AutoRemove = true
 		},
 	}
-	jetStream, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+	natsServer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,
 		Started:          true,
 	})
 	require.NoError(t, err)
 	return &NatsServer{
-		instance: jetStream,
+		instance: natsServer,
 	}
 }
 
-func (js *NatsServer) Port(t *testing.T) int {
+func (ns *NatsServer) Port(t *testing.T) int {
 	ctx, cancel := context.WithTimeout(context.TODO(), time.Minute)
 	defer cancel()
-	p, err := js.instance.MappedPort(ctx, "4222")
+	p, err := ns.instance.MappedPort(ctx, "4222")
 	require.NoError(t, err)
 	return p.Int()
 }
 
-func (js *NatsServer) Address(t *testing.T) string {
-	return fmt.Sprintf("nats://127.0.0.1:%d", js.Port(t))
+func (ns *NatsServer) Address(t *testing.T) string {
+	return fmt.Sprintf("nats://127.0.0.1:%d", ns.Port(t))
 }
 
-func (js *NatsServer) Close(t *testing.T) {
+func (ns *NatsServer) Close(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.TODO(), time.Minute)
 	defer cancel()
-	require.NoError(t, js.instance.Terminate(ctx))
+	require.NoError(t, ns.instance.Terminate(ctx))
 }
