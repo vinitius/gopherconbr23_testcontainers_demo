@@ -33,7 +33,7 @@ func TestMain(m *testing.M) {
 }
 
 func (s *SQLRepositorySuite) SetupSuite() {
-	ctx, cancelFn := context.WithTimeout(context.TODO(), 10*time.Second)
+	ctx, cancelFn := context.WithTimeout(context.TODO(), 1*time.Minute)
 	defer cancelFn()
 
 	s.PostgresDatabaseContainer = integration.NewPostgresDatabase(s.T(), _initSQLPath)
