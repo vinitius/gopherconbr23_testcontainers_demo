@@ -1,0 +1,45 @@
+name: Verify
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+    paths:
+      - "**"
+  pull_request:
+    branches:
+      - '**'
+      - '!master'
+    paths:
+      - "**"
+
+jobs:
+  verify:
+    name: Tests and Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.19
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Add GOPATH/bin to PATH
+        run: |
+          set -euo pipefail
+          echo "GOPATH=$(dirname $GITHUB_WORKSPACE)" >> $GITHUB_ENV
+          echo "$(dirname $GITHUB_WORKSPACE)/bin" >> $GITHUB_PATH              
+
+      - name: Lint
+        run: make lint
+
+      - name: Run Tests
+        run: make test

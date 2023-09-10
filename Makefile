@@ -9,16 +9,10 @@ fmt: ## Format files
 	goimports -local gopherconbr.org/23/testcontainers/demo -w .
 	gofumpt -l -w .
 
-test: ## Run unit tests
-	touch count.out
-	go test -covermode=count -coverprofile=count.out ./...
-	$(MAKE) coverage
-
-coverage: ## Unit tests coverage
-	go tool cover -func=count.out
+test: ## Run tests
+	go test -v ./...
 
 lint: ## Run linter
-	@golangci-lint -v run ./...
-	@test -z "$$(golangci-lint run ./...)"
+	docker run --rm -v $(PWD):/app -w /app golangci/golangci-lint:v1.52.2 golangci-lint run -v
 
 .PHONY: test
